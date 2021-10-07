@@ -14,7 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-public class BigestPhoto {
+public class BigestPhotoHttpClient {
     private static final String LINK = "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=10&api_key=DEMO_KEY";
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -23,7 +23,6 @@ public class BigestPhoto {
                 .followRedirects(HttpClient.Redirect.NORMAL)
                 .build();
         var request = HttpRequest.newBuilder()
-                .GET()
                 .uri(URI.create(LINK))
                 .build();
 
@@ -31,6 +30,8 @@ public class BigestPhoto {
                 HttpResponse.BodyHandlers.ofString());
 
         var body = response.body();
+
+        // print the bigest photos size
         mapper.readValue(body, Photos.class).getPhotos().stream()
                 .map(Photo::getImageName)
                 .map(photoName -> getPhotoLinkWithSize(client, photoName))
@@ -40,9 +41,13 @@ public class BigestPhoto {
 
     private static Map.Entry<String, Integer> getPhotoLinkWithSize(HttpClient client, String photoName) {
         try {
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create(photoName))
+                    .method("HEAD", HttpRequest.BodyPublishers.noBody())
+                    .build();
+
             var length = Integer.valueOf(
-                    client.send(HttpRequest.newBuilder().uri(URI.create(photoName)).build(),
-                                    HttpResponse.BodyHandlers.ofString())
+                    client.send(request, HttpResponse.BodyHandlers.discarding())
                             .headers()
                             .firstValue("content-length")
                             .orElse("0")
