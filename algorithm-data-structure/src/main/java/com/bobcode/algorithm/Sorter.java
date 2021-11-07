@@ -8,4 +8,6 @@ public interface Sorter {
     void insertionSort(int[] data);
 
     void mergeSort(int[] data, int n);
+
+    void margeSortParallel(int[] data);
 }

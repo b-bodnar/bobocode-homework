@@ -1,8 +1,10 @@
 package com.bobcode.algorithm;
 
 import java.util.Arrays;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveAction;
 
-public class SorterImpl implements Sorter{
+public class SorterImpl implements Sorter {
 
     /**
      * @param data input array for sorting
@@ -87,5 +89,52 @@ public class SorterImpl implements Sorter{
         }
         System.arraycopy(l, i, data, i + j, l.length - i);
         System.arraycopy(r, j, data, i + j, r.length - j);
+    }
+
+    @Override
+    public void margeSortParallel(int[] data) {
+        ForkJoinPool.commonPool().invoke(new MargeSortTask(data));
+    }
+}
+
+class MargeSortTask extends RecursiveAction {
+    private int[] data;
+    private int n;
+
+    public MargeSortTask(int[] data) {
+        this.data = data;
+        this.n = data.length;
+    }
+
+    @Override
+    protected void compute() {
+        if (data.length == 1) {
+            return;
+        }
+        var left = Arrays.copyOfRange(data, 0, n / 2);
+        var right = Arrays.copyOfRange(data, n / 2, n);
+
+        var leftTask = new MargeSortTask(left);
+        var rightTask = new MargeSortTask(right);
+
+        leftTask.fork();
+        rightTask.compute();
+        leftTask.join();
+
+        merge(data, left, right);
+    }
+
+    private void merge(int[] data, int[] left, int[] right) {
+        var i = 0;
+        var j = 0;
+        while (i < left.length && j < right.length) {
+            if (left[i] < right[j]) {
+                data[i + j] = left[i++];
+            } else {
+                data[i + j] = right[j++];
+            }
+        }
+        System.arraycopy(left, i, data, i + j, left.length - i);
+        System.arraycopy(right, j, data, i + j, right.length - j);
     }
 }
