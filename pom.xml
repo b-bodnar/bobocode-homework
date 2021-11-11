@@ -11,6 +11,7 @@
     <modules>
         <module>algorithm-data-structure</module>
         <module>http-net-socket</module>
+        <module>servlet</module>
     </modules>
 
     <properties>

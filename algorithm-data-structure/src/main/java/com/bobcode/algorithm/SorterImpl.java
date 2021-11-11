@@ -1,6 +1,10 @@
 package com.bobcode.algorithm;
 
-public class SorterImpl implements Sorter{
+import java.util.Arrays;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveAction;
+
+public class SorterImpl implements Sorter {
 
     /**
      * @param data input array for sorting
@@ -62,40 +66,75 @@ public class SorterImpl implements Sorter{
      */
     @Override
     public void mergeSort(int[] data, int n) {
-        if (n < 2) {
+        if (n == 1) {
             return;
         }
-        var mid = n / 2;
-        int[] l = new int[mid];
-        int[] r = new int[n - mid];
-
-        for (int i = 0; i < mid; i++) {
-            l[i] = data[i];
-        }
-        for (int i = mid; i < n; i++) {
-            r[i - mid] = data[i];
-        }
-
+        int mid = n / 2;
+        int[] l = Arrays.copyOfRange(data, 0, mid);
+        int[] r = Arrays.copyOfRange(data, mid, n);
         mergeSort(l, mid);
         mergeSort(r, n - mid);
-        merge(data, l, r, mid, n - mid);
+        merge(data, l, r);
+
     }
 
-    private static void merge(int[] data, int[] l, int[] r, int left, int right) {
-        int i = 0, j = 0, k = 0;
-        while (i < left && j < right) {
-            if (l[i] <= r[j]) {
-                data[k++] = l[i++];
+    private void merge(int[] data, int[] l, int[] r) {
+        int i = 0, j = 0;
+        while (i < l.length && j < r.length) {
+            if (l[i] < r[j]) {
+                data[i + j] = l[i++];
             } else {
-                data[k++] = r[j++];
+                data[i + j] = r[j++];
             }
         }
-        while (i < left) {
-            data[k++] = l[i++];
-        }
-        while (j < right) {
-            data[k++] = r[j++];
-        }
+        System.arraycopy(l, i, data, i + j, l.length - i);
+        System.arraycopy(r, j, data, i + j, r.length - j);
+    }
 
+    @Override
+    public void margeSortParallel(int[] data) {
+        ForkJoinPool.commonPool().invoke(new MargeSortTask(data));
+    }
+}
+
+class MargeSortTask extends RecursiveAction {
+    private int[] data;
+    private int n;
+
+    public MargeSortTask(int[] data) {
+        this.data = data;
+        this.n = data.length;
+    }
+
+    @Override
+    protected void compute() {
+        if (data.length == 1) {
+            return;
+        }
+        var left = Arrays.copyOfRange(data, 0, n / 2);
+        var right = Arrays.copyOfRange(data, n / 2, n);
+
+        var leftTask = new MargeSortTask(left);
+        var rightTask = new MargeSortTask(right);
+
+        leftTask.fork();
+        rightTask.compute();
+        leftTask.join();
+
+        merge(data, left, right);
+    }
+
+    private void merge(int[] data, int[] left, int[] right) {
+        var i = 0;
+        var j = 0;
+        while (i < left.length && j < right.length) {
+            if (left[i] < right[j]) {
+                data[i + j] = left[i++];
+            } else {
+                data[i + j] = right[j++];
+            }
+        }
+        System.arraycopy(left, i, data, i + j, left.length - i);
+        System.arraycopy(right, j, data, i + j, right.length - j);
     }
 }
