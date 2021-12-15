@@ -1,4 +1,4 @@
-package com.bobocode.socket.com.bobcode;
+package com.bobocode.socket;
 
 import lombok.SneakyThrows;
 

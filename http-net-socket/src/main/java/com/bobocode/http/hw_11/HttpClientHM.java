@@ -29,7 +29,7 @@ public class HttpClientHM {
                 .send(request, HttpResponse.BodyHandlers.ofString());
 
         var photos = mapper.readValue(response.body(), Photos.class);
-        photos.getPhotos().forEach(photo -> System.out.println(photo.getImageName()));
+        photos.getListPhotos().forEach(photo -> System.out.println(photo.getImageName()));
     }
 }
 

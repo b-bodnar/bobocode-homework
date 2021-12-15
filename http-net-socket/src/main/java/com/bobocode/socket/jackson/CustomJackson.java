@@ -1,4 +1,4 @@
-package com.bobocode.socket.com.bobcode.jackson;
+package com.bobocode.socket.jackson;
 
 /**
  * This class shell work like an ObjectMapper with different generic classes

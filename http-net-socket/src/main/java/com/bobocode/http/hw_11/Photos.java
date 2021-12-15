@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 class Photos {
-    private List<Photo> photos;
+    private List<Photo> listPhotos;
 }
 
 @Getter
