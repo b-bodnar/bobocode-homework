@@ -1,5 +1,6 @@
 package com.bobocode.http.hw_11;
 
+import com.bobocode.http.model.Photos;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,7 +14,7 @@ public class RestTemplateHW {
         RestTemplate restTemplate = new RestTemplate();
 
         var photos = restTemplate.getForObject(LINK, Photos.class);
-        photos.getListPhotos()
+        photos.getPhotos()
                 .forEach(photo -> System.out.println(photo.getImageName()));
     }
 }

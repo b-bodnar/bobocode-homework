@@ -1,9 +1,8 @@
 package com.bobocode.http.hw12;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.bobocode.http.model.Photo;
+import com.bobocode.http.model.Photos;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.*;
 
 import java.io.IOException;
 import java.net.URI;
@@ -11,7 +10,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 
 public class BigestPhotoHttpClient {
@@ -59,14 +57,4 @@ public class BigestPhotoHttpClient {
     }
 }
 
-@Getter
-class Photos {
-    private List<Photo> photos;
-}
 
-@Getter
-@JsonIgnoreProperties(ignoreUnknown = true)
-class Photo {
-    @JsonProperty("img_src")
-    private String imageName;
-}

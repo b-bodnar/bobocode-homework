@@ -1,10 +1,7 @@
 package com.bobocode.http.hw_11;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.bobocode.http.model.Photos;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Getter;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -29,7 +26,7 @@ public class HttpClientHM {
                 .send(request, HttpResponse.BodyHandlers.ofString());
 
         var photos = mapper.readValue(response.body(), Photos.class);
-        photos.getListPhotos().forEach(photo -> System.out.println(photo.getImageName()));
+        photos.getPhotos().forEach(photo -> System.out.println(photo.getImageName()));
     }
 }
 
