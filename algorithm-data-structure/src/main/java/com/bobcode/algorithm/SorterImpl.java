@@ -61,19 +61,19 @@ public class SorterImpl implements Sorter {
 
     /**
      * @param data input data for sorting
-     * @param n    length of input data array
      * @author B.Bodnar
      */
     @Override
-    public void mergeSort(int[] data, int n) {
+    public void mergeSort(int[] data) {
+        var n = data.length;
         if (n == 1) {
             return;
         }
         int mid = n / 2;
         int[] l = Arrays.copyOfRange(data, 0, mid);
         int[] r = Arrays.copyOfRange(data, mid, n);
-        mergeSort(l, mid);
-        mergeSort(r, n - mid);
+        mergeSort(l);
+        mergeSort(r);
         merge(data, l, r);
 
     }
