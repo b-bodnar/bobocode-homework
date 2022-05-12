@@ -12,6 +12,9 @@
         <module>algorithm-data-structure</module>
         <module>http-net-socket</module>
         <module>servlet</module>
+        <module>jackson-learning</module>
+        <module>spring-bfpp</module>
+        <module>jdbc</module>
     </modules>
 
     <properties>
@@ -20,11 +23,17 @@
     </properties>
 
         <dependencies>
+
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.20</version>
+                <version>1.18.22</version>
                 <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>2.13.0</version>
             </dependency>
         </dependencies>
 </project>

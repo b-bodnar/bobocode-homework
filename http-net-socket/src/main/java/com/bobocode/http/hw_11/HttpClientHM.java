@@ -1,10 +1,7 @@
 package com.bobocode.http.hw_11;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.bobocode.http.model.Photos;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Getter;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
