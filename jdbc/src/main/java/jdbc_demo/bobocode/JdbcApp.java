@@ -1,4 +1,4 @@
-package jdbc_demo;
+package jdbc_demo.bobocode;
 
 import lombok.SneakyThrows;
 import org.postgresql.ds.PGSimpleDataSource;
@@ -20,8 +20,8 @@ public class JdbcApp {
 
     private static final String GET_ALL_PRODUCTS = "SELECT * FROM products;";
     private static final String INSERT_PRODUCTS = "INSERT INTO products(name, price, added_by) VALUES (?, ?, ?);";
-    private static int BUTCH_SIZE = 50;
-    private static int PRODUCT_AMOUNT = 1_000_000;
+    private static final int BUTCH_SIZE = 50;
+    private static final int PRODUCT_AMOUNT = 1_000_000;
     private static DataSource dataSource;
 
     @SneakyThrows
@@ -31,7 +31,7 @@ public class JdbcApp {
 
         var start = System.nanoTime();
         try (var connection = dataSource.getConnection()) {
-            try (var insertStatement = connection.prepareStatement("INSERT INTO products(name, price, added_by) VALUES (?, ?, ?);")) {
+            try (var insertStatement = connection.prepareStatement(INSERT_PRODUCTS)) {
 
                 for (int i = 1; i <= PRODUCT_AMOUNT; i++) {
                     insertStatement.setString(1, "name" + i);
@@ -55,7 +55,7 @@ public class JdbcApp {
 
     private static void initializeDataSource() {
         PGSimpleDataSource pgSimpleDataSource = new PGSimpleDataSource();
-        pgSimpleDataSource.setURL("jdbc:postgresql://localhost:5433/study");
+        pgSimpleDataSource.setURL("jdbc:postgresql://localhost:5433/bobocode");
         pgSimpleDataSource.setUser("postgres");
         pgSimpleDataSource.setPassword("postgres");
         dataSource = pgSimpleDataSource;
